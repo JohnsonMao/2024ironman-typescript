@@ -1,3 +1,7 @@
 @url = http://localhost:9453
 
 GET {{url}}/task
+
+###
+
+GET {{url}}/task/2
