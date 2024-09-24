@@ -1,13 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
-import getTasks, { Task } from '../models/task.model';
+import TaskModel, { ITask } from '../models/task.model';
+
+const taskModel = new TaskModel();
 
 export const getAllTask = async (
     req: Request,
-    res: Response<Task[]>,
+    res: Response<ITask[]>,
     next: NextFunction
 ) => {
     try {
-        const tasks = await getTasks();
+        const tasks = await taskModel.getAll();
         res.status(200).json(tasks);
     } catch (error) {
         next(error);
@@ -16,12 +18,11 @@ export const getAllTask = async (
 
 export const getTaskById = async (
     req: Request<{ id: string }>,
-    res: Response<Task | null>,
+    res: Response<ITask | null>,
     next: NextFunction
 ) => {
     try {
-        const tasks = await getTasks();
-        const task = tasks.find((task) => task.id === req.params.id) || null;
+        const task = await taskModel.getById(req.params.id);
         res.status(200).json(task);
     } catch (error) {
         next(error);
@@ -29,25 +30,40 @@ export const getTaskById = async (
 };
 
 export const createTask = async (
-    req: Request,
-    res: Response,
+    req: Request<{}, {}, ITask>,
+    res: Response<string>,
     next: NextFunction
 ) => {
-    res.send('Create Task!');
+    try {
+        const id = await taskModel.create(req.body);
+        res.status(201).json(id);
+    } catch (error) {
+        next(error);
+    }
 };
 
 export const updateTask = async (
-    req: Request,
+    req: Request<{ id: string }>,
     res: Response,
     next: NextFunction
 ) => {
-    res.send('Update Task!');
+    try {
+        await taskModel.update(req.params.id, req.body);
+        res.status(200).json({ message: 'Task updated successfully' });
+    } catch (error) {
+        next(error);
+    }
 };
 
 export const deleteTask = async (
-    req: Request,
+    req: Request<{ id: string }>,
     res: Response,
     next: NextFunction
 ) => {
-    res.send('Delete Task!');
+    try {
+        await taskModel.delete(req.params.id);
+        res.status(200).json({ message: 'Task deleted successfully' });
+    } catch (error) {
+        next(error);
+    }
 };
