@@ -1,14 +1,13 @@
-async function getTasks() {
-    return [
-        {
-            id: '1',
-            title: 'Task 1',
-            description: 'Description 1',
-            completed: false,
-        },
-    ];
+import AbstractBaseModel, { IData } from './abstract/base.model';
+
+export interface ITask extends IData {
+    title: string;
+    description: string;
+    completed: boolean;
 }
 
-export type Task = Awaited<ReturnType<typeof getTasks>>[number];
+class TaskModel extends AbstractBaseModel<ITask> {
+    collection = 'task';
+}
 
-export default getTasks;
+export default TaskModel;
