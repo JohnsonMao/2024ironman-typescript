@@ -38,16 +38,13 @@ export default class Database {
         }
     }
 
-    public async create<T extends Data>(
-        module: string,
-        data: T
-    ): Promise<string> {
+    public async create<T extends Omit<Data, 'id'>>(module: string, data: T): Promise<string> {
         const db = await this.readDB();
-        const _id = crypto.randomUUID();
+        const id = crypto.randomUUID();
         if (!Array.isArray(db[module])) db[module] = [];
-        db[module].push({ _id, ...data });
+        db[module].push({ ...data, id });
         await this.writeDB(db);
-        return _id;
+        return id;
     }
 
     public async read<T extends Data>(module: string): Promise<T[]> {
@@ -60,7 +57,7 @@ export default class Database {
         }
     }
 
-    public async update<T extends Data>(module: string, id: string, data: T) {
+    public async update<T extends Omit<Data, 'id'>>(module: string, id: string, data: T) {
         const db = await this.readDB();
         const index = (db[module] ?? []).findIndex((row) => row.id === id);
         if (!db[module] || index === -1) throw new Error('Data not found');

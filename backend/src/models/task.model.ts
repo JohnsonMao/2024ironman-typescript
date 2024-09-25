@@ -1,13 +1,21 @@
-import AbstractBaseModel, { IData } from './abstract/base.model';
+import { z } from 'zod';
+import AbstractBaseModel from '../utils/abstract/base.model';
 
-export interface ITask extends IData {
-    title: string;
-    description: string;
-    completed: boolean;
+export const inputTaskSchema = z.object({
+    title: z.string().min(1),
+    description: z.string().optional(),
+    status: z.enum(['new', 'active', 'completed']).default('new'),
+    storyPoint: z.number().optional(),
+});
+
+export interface TaskType extends z.infer<typeof inputTaskSchema> {
+    id: string;
 }
 
-class TaskModel extends AbstractBaseModel<ITask> {
+export default class TaskModel extends AbstractBaseModel<TaskType> {
     collection = 'task';
-}
 
-export default TaskModel;
+    validateData(data: unknown): z.infer<typeof inputTaskSchema> {
+        return inputTaskSchema.parse(data);
+    }
+}
