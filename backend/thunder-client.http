@@ -5,3 +5,31 @@ GET {{url}}/task
 ###
 
 GET {{url}}/task/2
+
+###
+
+POST {{url}}/task
+Content-Type: application/json
+
+{
+    "title": "寫鐵人賽文章",
+    "description": "剩 6 天就快完賽了，加油！",
+    "status": "active",
+    "storyPoints": 3
+}
+
+###
+
+PUT {{url}}/task/2
+Content-Type: application/json
+
+{
+    "title": "寫鐵人賽文章",
+    "description": "剩 5 天就快完賽了，加油！",
+    "status": "active",
+    "storyPoints": 3
+}
+
+###
+
+DELETE {{url}}/task/2
