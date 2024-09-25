@@ -1,8 +1,6 @@
-import Database, { Data } from '../../database';
+import Database, { Data } from '../database';
 
-export interface IData extends Data {}
-
-export default abstract class AbstractBaseModel<T extends IData> {
+export default abstract class AbstractBaseModel<T extends Data> {
     abstract collection: string;
     private db: Database;
     constructor() {
@@ -18,12 +16,12 @@ export default abstract class AbstractBaseModel<T extends IData> {
         return tasks.find((task) => task.id === id) || null;
     }
 
-    async create(data: T) {
-        return this.db.create<T>(this.collection, data);
+    async create(data: Omit<T, 'id'>) {
+        return this.db.create<Omit<T, 'id'>>(this.collection, data);
     }
 
-    async update(id: string, data: T) {
-        return this.db.update<T>(this.collection, id, data);
+    async update(id: string, data: Omit<T, 'id'>) {
+        return this.db.update<Omit<T, 'id'>>(this.collection, id, data);
     }
 
     async delete(id: string) {
