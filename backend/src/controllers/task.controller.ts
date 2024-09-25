@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import TaskModel, { ITask } from '../models/task.model';
+import TaskModel, { TaskType } from '../models/task.model';
 
 const taskModel = new TaskModel();
 
 export const getAllTask = async (
     req: Request,
-    res: Response<ITask[]>,
+    res: Response<TaskType[]>,
     next: NextFunction
 ) => {
     try {
@@ -18,7 +18,7 @@ export const getAllTask = async (
 
 export const getTaskById = async (
     req: Request<{ id: string }>,
-    res: Response<ITask | null>,
+    res: Response<TaskType | null>,
     next: NextFunction
 ) => {
     try {
@@ -30,26 +30,28 @@ export const getTaskById = async (
 };
 
 export const createTask = async (
-    req: Request<{}, {}, ITask>,
-    res: Response<string>,
+    req: Request<{}, {}, TaskType>,
+    res: Response<{ id: string }>,
     next: NextFunction
 ) => {
     try {
-        const id = await taskModel.create(req.body);
-        res.status(201).json(id);
+        const task = taskModel.validateData(req.body);
+        const id = await taskModel.create(task);
+        res.status(201).json({ id });
     } catch (error) {
         next(error);
     }
 };
 
 export const updateTask = async (
-    req: Request<{ id: string }>,
+    req: Request<{ id: string }, {}, TaskType>,
     res: Response,
     next: NextFunction
 ) => {
     try {
-        await taskModel.update(req.params.id, req.body);
-        res.status(200).json({ message: 'Task updated successfully' });
+        const task = taskModel.validateData(req.body);
+        await taskModel.update(req.params.id, task);
+        res.status(200);
     } catch (error) {
         next(error);
     }
@@ -62,7 +64,7 @@ export const deleteTask = async (
 ) => {
     try {
         await taskModel.delete(req.params.id);
-        res.status(200).json({ message: 'Task deleted successfully' });
+        res.status(200);
     } catch (error) {
         next(error);
     }
