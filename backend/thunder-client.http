@@ -1,10 +1,11 @@
 @url = http://localhost:9453
+@id = c3c1dd84-aa3e-4413-b800-448cdbca7034
 
 GET {{url}}/task
 
 ###
 
-GET {{url}}/task/2
+GET {{url}}/task/{{id}}
 
 ###
 
@@ -20,7 +21,7 @@ Content-Type: application/json
 
 ###
 
-PUT {{url}}/task/2
+PUT {{url}}/task/{{id}}
 Content-Type: application/json
 
 {
@@ -32,4 +33,4 @@ Content-Type: application/json
 
 ###
 
-DELETE {{url}}/task/2
+DELETE {{url}}/task/{{id}}
