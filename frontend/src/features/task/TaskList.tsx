@@ -1,6 +1,21 @@
 import { useEffect, useState } from 'react';
 import { TaskType } from '@models/task.model';
 import { getTasks } from '@/services/task.service';
+import List from '@/components/List';
+
+function TaskItem({ title, description, status }: TaskType) {
+    return (
+        <li className="list__item">
+            <div className="task-card">
+                <div className="task-card__header">
+                    <div>{title}</div>
+                    <div>{status}</div>
+                </div>
+                <div>{description}</div>
+            </div>
+        </li>
+    );
+}
 
 export default function TaskList() {
     const [tasks, setTasks] = useState<TaskType[]>([]);
@@ -10,18 +25,12 @@ export default function TaskList() {
     }, []);
 
     return (
-        <ul className="list">
-            {tasks.map((task) => (
-                <li key={task.id} className="list__item">
-                    <div className="task-card">
-                        <div className="task-card__header">
-                            <div>{task.title}</div>
-                            <div>{task.status}</div>
-                        </div>
-                        <div>{task.description}</div>
-                    </div>
-                </li>
-            ))}
-        </ul>
+        <List
+            as="ul"
+            className="list"
+            items={tasks}
+            renderKey={(task) => task.id}
+            renderItem={TaskItem}
+        />
     );
 }
