@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
-import { TaskType } from '@models/task.model';
-import { getTasks } from '@/services/task.service';
+import type { TaskType } from '@/services/task.service';
 import List from '@/components/List';
 
-function TaskItem({ title, description, status }: TaskType) {
+type TaskItemProps = TaskType;
+
+type TaskListProps = {
+    tasks: TaskType[];
+};
+
+function TaskItem({ title, description, status }: TaskItemProps) {
     return (
         <li className="list__item">
             <div className="task-card">
@@ -17,13 +21,7 @@ function TaskItem({ title, description, status }: TaskType) {
     );
 }
 
-export default function TaskList() {
-    const [tasks, setTasks] = useState<TaskType[]>([]);
-
-    useEffect(() => {
-        getTasks().then(setTasks);
-    }, []);
-
+export default function TaskList({ tasks }: TaskListProps) {
     return (
         <List
             as="ul"
