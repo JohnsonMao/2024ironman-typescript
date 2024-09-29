@@ -1,13 +1,8 @@
-import TaskList from './features/task/TaskList';
+import Task from './pages/task.page';
 import './App.css';
 
 function App() {
-    return (
-        <div className="container">
-            <h1>Task Board</h1>
-            <TaskList />
-        </div>
-    );
+    return <Task />;
 }
 
 export default App;

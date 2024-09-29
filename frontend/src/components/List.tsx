@@ -9,14 +9,12 @@ type ListProps<TItem> = {
 };
 
 export default function List<TItem>({
-    as,
+    as: Wrapper = 'div',
     className,
     items,
     renderKey,
     renderItem,
 }: ListProps<TItem>) {
-    const Wrapper = as || 'div';
-
     return (
         <Wrapper className={className}>
             {items.map((item) => (

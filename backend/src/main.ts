@@ -8,6 +8,15 @@ const port = process.env.PORT || 9453;
 class Server {
     private app = express();
 
+    private corsMiddleware() {
+        this.app.use((req: Request, res: Response, next: NextFunction) => {
+            res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+            res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+            next();
+        })
+    }
+
     private registerRoutes() {
         controllers.forEach((Controller) => {
             const controller = new Controller();
@@ -36,6 +45,8 @@ class Server {
     }
 
     start() {
+        this.corsMiddleware();
+
         this.app.use(express.json());
 
         this.registerRoutes();
