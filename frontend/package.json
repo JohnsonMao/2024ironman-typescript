@@ -12,6 +12,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "validator": "file:../package/validator-1.0.0.tgz",
     "zod": "^3.23.8"
   },
   "devDependencies": {
