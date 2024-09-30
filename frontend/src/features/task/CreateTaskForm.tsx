@@ -1,3 +1,4 @@
+import { inputTaskSchema } from 'validator';
 import Form from '@/components/Form';
 import useForm from '@/hooks/useForm';
 import type { TaskType } from '@/services/task.service';
@@ -21,7 +22,12 @@ export default function CreateTaskForm({ errors, onCancel, onSubmit }: CreateTas
     });
 
     const handleSubmit = () => {
-        onSubmit(values);
+        try {
+            const result = inputTaskSchema.parse(values);
+            onSubmit(result);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
